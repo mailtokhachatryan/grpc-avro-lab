@@ -1,0 +1,22 @@
+plugins {
+	id 'java-library'
+	alias(libs.plugins.protobuf)
+}
+
+dependencies {
+	api platform(libs.grpc.bom)
+	api libs.grpc.protobuf
+	api libs.grpc.stub
+	api libs.protobuf.java
+	compileOnly 'javax.annotation:javax.annotation-api:1.3.2'
+}
+
+sourceSets.main.proto.srcDirs = [rootProject.file('contracts/proto')]
+
+protobuf {
+	protoc { artifact = "com.google.protobuf:protoc:${libs.versions.protobuf.asProvider().get()}" }
+	plugins { grpc { artifact = "io.grpc:protoc-gen-grpc-java:${libs.versions.grpc.get()}" } }
+	generateProtoTasks { all().configureEach { plugins { grpc {} } } }
+}
+
+tasks.named('javadoc') { enabled = false }
