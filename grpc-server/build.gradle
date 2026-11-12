@@ -1,0 +1,15 @@
+plugins {
+	id 'application'
+	alias(libs.plugins.spring.boot)
+}
+
+dependencies {
+	implementation platform(libs.spring.boot.bom)
+	implementation project(':grpc-contract')
+	implementation libs.spring.boot.grpc.server
+	implementation libs.spring.boot.actuator
+	implementation libs.grpc.services
+	testImplementation libs.grpc.inprocess
+}
+
+application { mainClass = 'com.example.grpcavrolab.grpc.server.PingServerApplication' }
