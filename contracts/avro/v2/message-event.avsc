@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "MessageEvent",
+  "namespace": "com.example.grpcavrolab.avro",
+  "fields": [
+    {"name": "event_id", "type": "string"},
+    {"name": "message", "type": "string"},
+    {"name": "source", "type": ["null", "string"], "default": null}
+  ]
+}

@@ -1,0 +1,55 @@
+plugins {
+	id 'application'
+	alias(libs.plugins.spring.boot)
+}
+
+sourceSets {
+	integrationTest {
+		compileClasspath += sourceSets.main.output
+		runtimeClasspath += sourceSets.main.output
+	}
+}
+
+configurations {
+	integrationTestImplementation.extendsFrom testImplementation
+	integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+dependencies {
+	implementation platform(libs.spring.boot.bom)
+	implementation libs.spring.boot.starter
+	implementation libs.kafka.clients
+	implementation libs.avro
+	implementation(libs.confluent.avro.serde) {
+		exclude group: 'org.apache.kafka', module: 'kafka-clients'
+	}
+	annotationProcessor platform(libs.spring.boot.bom)
+	annotationProcessor libs.spring.boot.config.processor
+	integrationTestImplementation platform(libs.testcontainers.bom)
+	integrationTestImplementation libs.testcontainers.kafka
+}
+
+tasks.named('processResources') {
+	from(rootProject.layout.projectDirectory.dir('contracts/avro')) { into 'avro' }
+}
+
+tasks.register('integrationTest', Test) {
+	description = 'Runs Kafka and Schema Registry tests using Docker.'
+	group = 'verification'
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
+	shouldRunAfter tasks.named('test')
+}
+
+application { mainClass = 'com.example.grpcavrolab.avro.AvroMessagingApplication' }
+
+['produce', 'consume', 'inspect'].each { command ->
+	tasks.register(command, JavaExec) {
+		group = 'application'
+		mainClass = application.mainClass
+		classpath = sourceSets.main.runtimeClasspath
+		doFirst {
+			setArgs([command] + (getArgs() ?: []))
+		}
+	}
+}

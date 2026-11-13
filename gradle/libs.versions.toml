@@ -4,9 +4,13 @@ grpc = "1.84.1"
 protobuf = "4.36.2"
 protobuf-plugin = "0.9.5"
 logback = "1.6.6"
+avro = "1.12.1"
+confluent = "8.4.1"
+testcontainers = "2.0.5"
 
 [libraries]
 spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
+spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
 spring-boot-grpc-server = { module = "org.springframework.boot:spring-boot-starter-grpc-server" }
 spring-boot-grpc-client = { module = "org.springframework.boot:spring-boot-starter-grpc-client" }
 spring-boot-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
@@ -20,6 +24,11 @@ protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "p
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 logback-core = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+kafka-clients = { module = "org.apache.kafka:kafka-clients" }
+avro = { module = "org.apache.avro:avro", version.ref = "avro" }
+confluent-avro-serde = { module = "io.confluent:kafka-avro-serializer", version.ref = "confluent" }
+testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
+testcontainers-kafka = { module = "org.testcontainers:testcontainers-kafka" }
 
 [plugins]
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
